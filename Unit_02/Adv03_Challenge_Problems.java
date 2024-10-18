@@ -1,6 +1,6 @@
 /*
  * Theodore Truebe
- * HW03
+ * Advanced Topic 03 challenge problem
  */
 import java.util.Scanner;
 public class Adv03_Challenge_Problems{
