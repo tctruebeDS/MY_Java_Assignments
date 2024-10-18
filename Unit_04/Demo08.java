@@ -18,11 +18,12 @@ public class Demo08 {
         while (i>0){
             System.out.println(i);
             i+=1;
-            // stops it at 10,000 so I don't destroy my computer
-            if (i > 10000){
+            // stops it at 1,000 so I don't destroy my computer
+            if (i > 1000){
                 i = 0;
             }
         }
+        @SuppressWarnings("unused")
         double total = 0.0;
         while (true) {
             System.out.println("Enter a number or 'q' to quit: ");
@@ -35,6 +36,13 @@ public class Demo08 {
                     total += in.nextDouble();
                 }
             }
+        }
+        // for loop
+        //scope of a var is the visibility of that var in the program (if I want to make it visible I should declare it outside the {}s )
+        for (int z = 1; i <6; i++){
+            System.out.println("Z is equal to " + z);
+            z +=1;
+
         }
         in.close();
     }
