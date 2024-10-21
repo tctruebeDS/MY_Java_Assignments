@@ -41,6 +41,10 @@ public class Adv03_Challenge_Problem_01 {
             while (price > .001){
                 price -= .01;
                 cents += 1;
+                //fixes a bug where the cents are one higher than they should be sometimes
+                if (price > .001 && price < .01){
+                    cents -=1;
+                }
             }
             //OUTPUT
             if (dollars > 0 && cents > 0){ //when there are dollars and cents
