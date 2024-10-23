@@ -1,6 +1,6 @@
 /*
  * Theodore Truebe
- * HW08 PartA
+ * HW08 Part A
  */
 package Unit_04.HW_08;
 import java.util.Scanner;
