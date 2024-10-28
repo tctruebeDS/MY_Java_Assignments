@@ -6,7 +6,8 @@ package Unit_04.Lesson09_Loops.HW09;
  */
 import java.util.Scanner;
 public class HW09_PartB {
-public static void main(String[]args){Scanner in=new Scanner(System.in);
+public static void main(String[]args)
+{Scanner in=new Scanner(System.in);
 // gets user input and asks for a string
 System.out.println("Enter a string that has 'e's that need to be counted: ");
 String s = in.nextLine();
