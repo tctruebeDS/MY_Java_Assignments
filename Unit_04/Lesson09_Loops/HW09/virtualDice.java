@@ -65,7 +65,7 @@ while (running == true){
         output = "+-------+%n| 0   0 |%n| 0   0 |%n| 0   0 |%n+-------+%n";
     }
     // outputs the image
-    if (dice.view = true){
+    if (dice.view == true){
         System.out.printf(output);
         dice.stopDisplay();
     } 
