@@ -13,12 +13,22 @@ import java.util.Scanner;
 *Distance to (point) - returns the distance to another point; takes another point as an argument.
  */
 public class AT07_PartB {
-    public static double valueX;
-    public static double valueY;
-    public static double moveX;
-    public static double moveY;
-    public static double newX;
-    public static double newY;
+    private static double valueX;
+    private static double valueY;
+    private static double moveX;
+    private static double moveY;
+    private static double newX;
+    private static double newY;
+
+    // constructor
+    AT07_PartB() {
+        valueX = 0;
+        valueY = 0;
+    }
+
+    public static void Coordinate() {
+        System.out.printf("Your point is at (%.2f,%.2f)%n", valueX, valueY);
+    }
 
     public static double getAngle() {
         double theta = Math.atan(valueY / valueX);
@@ -62,11 +72,13 @@ public class AT07_PartB {
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
+        System.out.printf("The current coordinate is (%.1f,%.1f)%n", AT07_PartB.valueX, AT07_PartB.valueY);
         boolean running = true;
         System.out.print("Enter an X coordinate: ");
         valueX = in.nextDouble();
         System.out.print("Enter a Y coordinate: ");
         valueY = in.nextDouble();
+        Coordinate();
         // outputs theta and the radius
         thetaRad();
         // makes a loop so the user can do different things without having to restart
