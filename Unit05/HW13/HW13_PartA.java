@@ -1,5 +1,6 @@
 package Unit05.HW13;
-
+// Theodore Truebe
+// Unit 05 HW 13 Part A
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.*;
