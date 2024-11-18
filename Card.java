@@ -249,5 +249,6 @@ public class Card {
         System.out.println("Rank = " + c.getRank());
         Card q = new Card(Suit.HEARTS, Rank.QUEEN);
         System.out.println(q.getRnk() + q.getFace());
+        in.close();
     }
 }
