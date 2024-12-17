@@ -2,6 +2,7 @@ package HW17;
 // Theodore Truebe 
 // Part A
 public class HW17_PartA {
+    @SuppressWarnings("unused")
     public static void main(String[] args) {
         // First part of part a 
         int[][] arr = new int[4][3];
