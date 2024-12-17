@@ -57,5 +57,6 @@ public class HW16_PartB {
         average(values);
         double avg = finalAverage;
         System.out.println("Average = " + avg);
+        in.close();
     }
 }
