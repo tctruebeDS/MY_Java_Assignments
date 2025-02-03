@@ -9,7 +9,7 @@ public class Yard {
 
     // Private member variables
     private int whichTurn;
-    private int delay = 250;
+    private int delay = 450;
     private int turns;
 
     public Yard(int rows, int columns) {
