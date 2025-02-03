@@ -2,18 +2,14 @@ package Mow;
 
 public class Mower {
     // Private member variables- represent where the mower is
-
-    private int row;
-    private int column;
-
-    public int direction = 3;
+    public int direction;
     public char mowerVisual;
     public char mowerLeft = '<';
     public char mowerRight = '>';
     public char mowerDown = 'v';
     public char mowerUp = '^';
-    public int mowerRow = 5;
-    public int mowerColumn = 5;
+    public int mowerRow;
+    public int mowerColumn;
     public char inFront;
     public int lookRow;
     public int lookColumn;
@@ -22,8 +18,11 @@ public class Mower {
         findMower();
     }
 
-    public Mower(int mowerRow, int mowerColumn, int direction) {
-        findMower();
+    // Mower overridden constructor
+    public Mower(int row, int column, int direction) {
+        mowerRow = row;
+        mowerColumn = column;
+        this.direction = direction;
     }
 
     public void findMower() {
@@ -40,6 +39,7 @@ public class Mower {
         return mowerColumn;
     }
 
+    // Retrieves the direction
     public void getDirection() {
         switch (direction) {
             case 0:
@@ -57,6 +57,8 @@ public class Mower {
         }
     }
 
+    // Looks at the direction the mower is facing and advances the mower in the
+    // proper direction
     public char lookForward(char array[][]) {
         lookRow = mowerRow;
         lookColumn = mowerColumn;
@@ -82,16 +84,12 @@ public class Mower {
                 lookRow = mowerRow;
                 break;
         }
-        if (array[lookRow][lookColumn] == 'R') {
-            inFront = 'R';
-        } else if (array[lookRow][lookColumn] == ' ') {
-            inFront = ' ';
-        } else if (array[lookRow][lookColumn] == '+') {
-            inFront = '+';
-        }
+        inFront = array[lookRow][lookColumn];
         return inFront;
     }
 
+    // Move forward method looks the direction the mower is facing and advances the
+    // mower in the proper direction
     public void moveForward(char array[][]) {
         array[mowerRow][mowerColumn] = ' ';
         switch (direction) {
@@ -140,7 +138,7 @@ public class Mower {
         if (direction == 0) {
             direction = 3;
         } else {
-            direction += 1;
+            direction -= 1;
         }
         getDirection();
     }
@@ -155,9 +153,36 @@ public class Mower {
         getDirection();
     }
 
+    // Generates randomized mower
+    public void randomizeMower(Yard yard) {
+        int corner = (int) (Math.random() * 4);
+        switch (corner) {
+            case 0:
+                this.mowerRow = 1;
+                this.mowerColumn = 1;
+                break;
+            case 1:
+                this.mowerRow = 1;
+                this.mowerColumn = Yard.columns - 2;
+            case 2:
+                this.mowerRow = Yard.rows - 2;
+                this.mowerColumn = 1;
+                break;
+            case 3:
+                this.mowerRow = Yard.rows - 2;
+                this.mowerColumn = Yard.columns - 2;
+                break;
+        }
+        this.direction = (int) (Math.random() * 3);
 
+    }
+    // Cryptic numbers
+    // 0 12 3
 
+    // 0 12 3
+    // 0 12 3
 
+    // 0 12 3
 
     public static void main(String[] args) {
 
