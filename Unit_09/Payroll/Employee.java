@@ -35,8 +35,12 @@ public class Employee {
         // Employees only get an annual salary.
         return getSalary();
     }
-    // Formatted print for displaying the payroll
-    public void printPayroll() {
-        System.out.printf("%-10s:  salary = $    %.2f; annual income = $    %.2f%n", name, salary, getAnnualIncome());
-    } 
+
+    
+    public void displayInfo() {
+        getAnnualIncome();
+        System.out.println(name + ":");
+        System.out.printf("  Salary = $%,.2f%n", salary);
+    }
+    
 }
