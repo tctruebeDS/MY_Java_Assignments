@@ -6,7 +6,6 @@ import java.awt.EventQueue;
 public class Application extends JFrame {
     private final int FRAME_WIDTH = 1080;
     private final int FRAME_HEIGHT = 720;
-    
 
     /*
      * Constructor.
@@ -33,18 +32,18 @@ public class Application extends JFrame {
                 break;
         }
         // Use the inherited setSize() method
-       // to set the size of our frame.
-       // this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
+        // to set the size of our frame.
+        // this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
-       // add a Board to our JFrame.
-       Board board = new Board();
-       this.add(board);
-   
-       // set the size based on the board size
-       // and also account for the border width and the bar height.
-       int application_height = (int) board.getPreferredSize().getHeight() + bar_height + border_width;
-       int application_width = (int) board.getPreferredSize().getWidth() + 2 * border_width;
-       this.setSize(application_width, application_height);
+        // add a Board to our JFrame.
+        Board board = new Board();
+        this.add(board);
+
+        // set the size based on the board size
+        // and also account for the border width and the bar height.
+        int application_height = (int) board.getPreferredSize().getHeight() + bar_height + border_width;
+        int application_width = (int) board.getPreferredSize().getWidth() + 2 * border_width;
+        this.setSize(application_width, application_height);
 
         // int application_width = FRAME_WIDTH + 2 * border_width;
         // int application_height = FRAME_HEIGHT + bar_height + border_width;
