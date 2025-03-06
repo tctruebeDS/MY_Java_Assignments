@@ -26,12 +26,17 @@ public class Board extends JPanel {
 
     private int x = 0;
     private int y = 0;
+    private int r = 0;
     private final int DIAMETER = 20;
-    
+
     private Timer timer;
     private final int INITIAL_DELAY = 100;
     private final int PERIOD_INTERVAL = 25;
-    private int xSpeed = 2;
+    private int xSpeed = 1;
+    private int ySpeed = 1;
+    private int rotate = 5;
+    private BufferedImage img;
+    private boolean hasRunOnce = false;
 
     /*
      * Constructor
@@ -40,12 +45,6 @@ public class Board extends JPanel {
         // set background color of the board and default size.
         setBackground(Color.CYAN);
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
-
-        // set the initial position of the ball
-        // to be on the left side of the content area
-        // and in the middle of the content area.
-        x = 0;
-        y = B_HEIGHT / 2;
 
         timer = new Timer();
         timer.scheduleAtFixedRate(new ScheduledUpdate(),
@@ -56,19 +55,41 @@ public class Board extends JPanel {
      * Override the paintComponent() method.
      */
     public void paintComponent(Graphics g) {
-        // call parent class' method
+        // // call parent class' method
         super.paintComponent(g);
+
+        setBackground(Color.CYAN);
+        setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
         // cast to Graphics2D and then create affine transform.
         Graphics2D g2d = (Graphics2D) g;
+        // attempt to load the image.
+        try {
+            File imageFile = new File("A02_B/animate/media/Andy.jpg");
+            img = ImageIO.read(imageFile);
+            setPreferredSize(new Dimension(img.getWidth(), img.getHeight()));
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
 
         AffineTransform affineTransform = new AffineTransform();
 
-        affineTransform.translate(x - DIAMETER / 2, y - DIAMETER / 2);
-        // draw a filled ellipse using transformed location.
-        Ellipse2D ellipse = new Ellipse2D.Double(0, 0, DIAMETER, DIAMETER);
-        Shape transformedShape = affineTransform.createTransformedShape(ellipse);
-        g2d.setColor(Color.MAGENTA);
-        g2d.fill(transformedShape);
+        // draw a filled image using transformed location.
+
+        if (img != null) {
+            // affineTransform.translate(- / 2, -img.getHeight() / 2);
+            affineTransform.rotate(Math.toRadians(r), x + img.getWidth() / 2, y + img.getHeight() / 2);
+            affineTransform.translate(x, y);
+            g2d.drawImage(img, affineTransform, null);
+        } else {
+            g2d.setColor(Color.BLUE);
+            g2d.drawString("Unable to load image!", 25, 25);
+        }
+        // Ellipse2D ellipse = new Ellipse2D.Double(0, 0, DIAMETER, DIAMETER);
+        // Shape transformedShape = affineTransform.createTransformedShape(ellipse);
+        // g2d.setColor(Color.MAGENTA);
+        // g2d.fill(transformedShape);
+        // set background color of the board and default size.
+
     }
 
     private class ScheduledUpdate extends TimerTask {
@@ -78,12 +99,18 @@ public class Board extends JPanel {
          */
         public void run() {
             x += xSpeed;
+            y += ySpeed;
+            r += rotate;
             if (x > B_WIDTH) {
                 x = 0;
+            }
+            if (y > B_HEIGHT) {
+                y = 0;
             }
             repaint();
         }
     }
+
     public static void main(String[] args) {
         /*
          * In Java, GUI related actions should be
