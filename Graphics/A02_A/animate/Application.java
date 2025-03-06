@@ -1,4 +1,4 @@
-package A02.animate;
+package A02_A.animate;
 
 import javax.swing.JFrame;
 import java.awt.EventQueue;

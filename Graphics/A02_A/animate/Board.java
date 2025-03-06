@@ -1,4 +1,6 @@
-package A02.animate;
+// Theodore Truebe 
+// HW A02 Part A
+package A02_A.animate;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -29,14 +31,14 @@ public class Board extends JPanel {
 
         // attempt to load the image.
         try {
-            File imageFile = new File("A02/animate/media/cakes.jpg");
+            File imageFile = new File("A02_A/animate/media/imageToLoad.jpg");
             img = ImageIO.read(imageFile);
             setPreferredSize(new Dimension(img.getWidth(), img.getHeight()));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
-    
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
@@ -50,8 +52,9 @@ public class Board extends JPanel {
             y_t = this.getHeight() / 2;
             y_scaled = (int) ((img.getHeight() * scale) / 2.0);
             affineTransform.translate(x_t - x_scaled, y_t - y_scaled);
-            affineTransform.rotate(Math.toRadians(45), x_scaled, y_scaled);
+            
             affineTransform.scale(scale, scale);
+            affineTransform.translate(x_t, y_t);
             g2d.drawImage(img, affineTransform, null);
         } else {
             g2d.setColor(Color.BLUE);
