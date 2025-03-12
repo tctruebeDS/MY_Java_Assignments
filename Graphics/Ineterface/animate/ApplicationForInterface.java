@@ -1,20 +1,15 @@
-package A02_B.animate;
 
 import javax.swing.JFrame;
-
-import A02_B.animate.Application;
-import A02_B.animate.Board;
-
 import java.awt.EventQueue;
 
-public class Application extends JFrame {
+public class ApplicationForInterface extends JFrame {
     private final int FRAME_WIDTH = 1080;
     private final int FRAME_HEIGHT = 720;
 
     /*
      * Constructor.
      */
-    public Application(String title) {
+    public ApplicationForInterface(String title) {
         // the values for border width and title bar height
         // depend on the operating system.
         int border_width = 0;
@@ -40,7 +35,7 @@ public class Application extends JFrame {
         // this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
         // add a Board to our JFrame.
-        Board board = new Board();
+        BoardForInterface board = new BoardForInterface();
         this.add(board);
 
         // set the size based on the board size
@@ -88,7 +83,7 @@ public class Application extends JFrame {
          * any problems with other GUI-related actions.
          */
         EventQueue.invokeLater(() -> {
-            Application myApp = new Application("Not-A-Title");
+            ApplicationForInterface myApp = new ApplicationForInterface("Not-A-Title");
             myApp.setVisible(true);
         });
 

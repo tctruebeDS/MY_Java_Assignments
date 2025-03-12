@@ -1,6 +1,5 @@
 // Theodore Truebe 
-// HW A02 Part B
-package A02_B.animate;
+// HW A03 Part B 
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,32 +17,36 @@ import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-
-import A02_B.animate.Application;
+import java.util.random.*;
 
 public class Board extends JPanel {
     private final int B_WIDTH = 720;
     private final int B_HEIGHT = 720;
     private final int SIDE_LEN = 100;
 
-    private int x = 0;
-    private int y = 0;
+    private int x = (B_WIDTH / 2) - 50;
+    private int y = (B_HEIGHT / 2) - 50;
     private int r = 0;
     private final int DIAMETER = 20;
 
     private Timer timer;
     private final int INITIAL_DELAY = 100;
     private final int PERIOD_INTERVAL = 25;
-    private int xSpeed = 1;
-    private int ySpeed = 1;
+    private int xSpeed = (int) (Math.random() * 5);
+    private int ySpeed = (int) (Math.random() * 5);
     private int rotate = 5;
     private BufferedImage img;
-    private boolean hasRunOnce = false;
+    public SoundClip sitar = new SoundClip("animate/media/sitar.wav");
+    public SoundClip ow = new SoundClip("animate/media/ow.wav");
 
     /*
      * Constructor
      */
     public Board() {
+        sitar.setLoopTrue();
+        sitar.open();
+        sitar.play();
+        ow.open();
         // set background color of the board and default size.
         setBackground(Color.CYAN);
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
@@ -66,7 +69,7 @@ public class Board extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         // attempt to load the image.
         try {
-            File imageFile = new File("A02_B/animate/media/Andy.jpg");
+            File imageFile = new File("animate\\media\\Andy.jpg");
             img = ImageIO.read(imageFile);
             setPreferredSize(new Dimension(img.getWidth(), img.getHeight()));
         } catch (Exception e) {
@@ -78,7 +81,7 @@ public class Board extends JPanel {
         // draw a filled image using transformed location.
 
         if (img != null) {
-            // affineTransform.translate(- / 2, -img.getHeight() / 2);
+
             affineTransform.rotate(Math.toRadians(r), x + img.getWidth() / 2, y + img.getHeight() / 2);
             affineTransform.translate(x, y);
             g2d.drawImage(img, affineTransform, null);
@@ -86,11 +89,6 @@ public class Board extends JPanel {
             g2d.setColor(Color.BLUE);
             g2d.drawString("Unable to load image!", 25, 25);
         }
-        // Ellipse2D ellipse = new Ellipse2D.Double(0, 0, DIAMETER, DIAMETER);
-        // Shape transformedShape = affineTransform.createTransformedShape(ellipse);
-        // g2d.setColor(Color.MAGENTA);
-        // g2d.fill(transformedShape);
-        // set background color of the board and default size.
 
     }
 
@@ -103,14 +101,24 @@ public class Board extends JPanel {
             x += xSpeed;
             y += ySpeed;
             r += rotate;
-            if (x > B_WIDTH) {
-                x = 0;
+            if (x > B_WIDTH || x < 0) {
+                ow.play();
+                reverseX();
             }
-            if (y > B_HEIGHT) {
-                y = 0;
+            if (y > B_HEIGHT || y < 0) {
+                ow.play();
+                reverseY();
             }
             repaint();
         }
+    }
+
+    public void reverseX() {
+        xSpeed = (xSpeed * -1);
+    }
+
+    public void reverseY() {
+        ySpeed = (ySpeed * -1);
     }
 
     public static void main(String[] args) {

@@ -1,9 +1,9 @@
-package A02_B.animate;
+package animate;
 
 import javax.swing.JFrame;
 
-import A02_B.animate.Application;
-import A02_B.animate.Board;
+import animate.Application;
+import animate.OldMacDonald_Board;
 
 import java.awt.EventQueue;
 

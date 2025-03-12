@@ -1,9 +1,5 @@
-package A02_B.animate;
-
 import javax.swing.JFrame;
 
-import A02_B.animate.Application;
-import A02_B.animate.Board;
 
 import java.awt.EventQueue;
 
