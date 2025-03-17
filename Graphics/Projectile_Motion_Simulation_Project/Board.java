@@ -30,24 +30,28 @@ public class Board extends JPanel implements MouseListener, KeyListener {
 
     private int x = 100 - 50;
     private int y = B_HEIGHT - 200;
-    private int r = 0;
+
     private final int DIAMETER = 20;
 
     private Timer timer;
     private final int INITIAL_DELAY = 100;
     private final int PERIOD_INTERVAL = 25;
-    private int rotate = 0;
+
     private int rotateInterval = 5;
     private BufferedImage cannon;
     public SoundClip wheelSound = new SoundClip("media/wheel.wav");
     public SoundClip boomSound = new SoundClip("media/boom.wav");
     private int floor = (B_HEIGHT - 25);
-
+    // Stores x and y coordinates of the cannon
+    private double xCannon;
+    private double yCannon;
+    private double cannonRotation;
+    Color oddBrown = new Color(253, 174, 174);
     /*
      * Constructor
      */
     public Board() {
-
+        setCannonRotation(-45);
         wheelSound.setLoopFalse();
         wheelSound.open();
         boomSound.open();
@@ -79,6 +83,7 @@ public class Board extends JPanel implements MouseListener, KeyListener {
         g.drawLine(0, floor, B_WIDTH, floor);
         g.setColor(Color.GREEN);
         g.fillRect(0, floor + 1, B_WIDTH, B_HEIGHT);
+        
         try {
             File imageFile = new File("media/sm_cannon.png");
             cannon = ImageIO.read(imageFile);
@@ -93,24 +98,53 @@ public class Board extends JPanel implements MouseListener, KeyListener {
 
         if (cannon != null) {
 
-            affineTransform.rotate(Math.toRadians(r), x + cannon.getWidth() / 2, y + cannon.getHeight() / 2);
-            affineTransform.translate(x, y);
+            affineTransform.rotate(Math.toRadians(cannonRotation), 75, floor  - cannon.getHeight() / 2);
+            affineTransform.translate(60, floor - cannon.getHeight() );
             g2d.drawImage(cannon, affineTransform, null);
         } else {
             g2d.setColor(Color.BLUE);
             g2d.drawString("Unable to load image!", 25, 25);
         }
+        g.setColor(Color.BLACK);
+        g.drawPolygon(new int[] { 50, 75, 100 }, new int[] { floor + 10, floor - 25, floor + 10 }, 3);
+        g.setColor(oddBrown);
+        g.fillPolygon(new int[] { 50, 75, 100 }, new int[] { floor + 10, floor - 25, floor + 10 }, 3);
+        g.setColor(Color.BLUE);
+        g.fillOval(70, floor - 30, 10, 10);
+    }
+    
+    private double muzzleVelocity;
 
+    public double getMuzzleVelocity() {
+        return muzzleVelocity;
     }
 
+    public void setMuzzleVelocity(double muzzleVelocity) {
+        this.muzzleVelocity = muzzleVelocity;
+    }
+
+    // Getters and setters for cannon
+    public double getCannonRotation() {
+        return cannonRotation;
+    }
+
+    public void setCannonRotation(double cannonRotation) {
+        this.cannonRotation = cannonRotation;
+    }
+    private void fireCannon() {
+        boomSound.play();
+    }
     private void rotateCannon(int direction) {
-        rotate += (direction * rotateInterval);
-        if (rotate < -85) {
-            rotate = -85;
-        } else if (rotate > 0) {
-            rotate = 0;
+        setCannonRotation(getCannonRotation() + (direction * rotateInterval));
+
+        if (getCannonRotation() < -90) {
+            setCannonRotation(-90);
+        } else if (getCannonRotation() > 0) {
+            setCannonRotation(0);
+        } else {
+            // Makes it so only the sound only happens when the cannon actually moves 
+            wheelSound.noCutPlay();
         }
-        wheelSound.noCutPlay();
     }
 
     private class ScheduledUpdate extends TimerTask {
@@ -119,7 +153,6 @@ public class Board extends JPanel implements MouseListener, KeyListener {
          * Update the position of our ball here.
          */
         public void run() {
-            r = rotate;
             repaint();
         }
     }
@@ -164,11 +197,11 @@ public class Board extends JPanel implements MouseListener, KeyListener {
             rotateCannon(1);
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            System.out.println("U pressed space");
+            fireCannon(); 
         }
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             System.out.println("U pressed up");
-        } 
+        }
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             System.out.println("U pressed down");
         }
