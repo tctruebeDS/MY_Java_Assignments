@@ -11,12 +11,14 @@ public class Cannon extends JPanel {
     public SoundClip wheelSound;
     public SoundClip boomSound;
     private final int floor = 775;
+    private int timeScale;
+    private double rotateInterval;
 
     public Cannon() {
 
         wheelSound = new SoundClip("media/wheel.wav");
         boomSound = new SoundClip("media/boom.wav");
-        setCannonRotation(-45);
+        setCannonRotation(45);
         wheelSound.setLoopFalse();
         wheelSound.open();
         boomSound.open();
@@ -36,12 +38,32 @@ public class Cannon extends JPanel {
 
         AffineTransform affineTransform = new AffineTransform();
         if (cannon != null) {
-            affineTransform.rotate(Math.toRadians(cannonRotation), 75, floor - cannon.getHeight() / 2);
+            affineTransform.rotate(-Math.toRadians(cannonRotation), 75, floor - cannon.getHeight() / 2);
             affineTransform.translate(60, floor - cannon.getHeight());
             g2d.drawImage(cannon, affineTransform, null);
         } else {
             g2d.setColor(Color.BLUE);
             g2d.drawString("Unable to load image!", 25, 25);
+        }
+    }
+
+    public void rotateUp(double rotateInterval) {
+            this.rotateInterval = rotateInterval;
+        setCannonRotation(cannonRotation + rotateInterval);
+        if (getCannonRotation() > 90) {
+            setCannonRotation(90);
+        } else {
+            wheelSound.noCutPlay();
+        }
+    }
+    
+    public void rotateDown(double rotateInterval) {
+        this.rotateInterval = rotateInterval;
+        setCannonRotation(cannonRotation - rotateInterval);
+        if (getCannonRotation() <0) {
+            setCannonRotation(0);
+        } else {
+            wheelSound.noCutPlay();
         }
     }
 
@@ -57,4 +79,13 @@ public class Cannon extends JPanel {
     public void fireCannon() {
         boomSound.play();
     }
+
+    public double getTimeScale() {
+        return timeScale;
+    }
+
+    public String getAngleText() {
+        return "Cannon Rotation: " + getCannonRotation() + " deg";
+    }
+
 }

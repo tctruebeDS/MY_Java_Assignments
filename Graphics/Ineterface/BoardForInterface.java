@@ -77,7 +77,7 @@ public class BoardForInterface extends JPanel implements KeyListener, MouseListe
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == VK_SPACE) {
             resetPosition();
-            blop.play(true);
+            blop.play();
         }
     }
 
@@ -88,15 +88,15 @@ public class BoardForInterface extends JPanel implements KeyListener, MouseListe
 
     @Override
     public void mouseClicked(MouseEvent m) {
-        setPositions(m.getX(), m.getY());
         
-        blip.play(true);
         
     }
 
     @Override
     public void mousePressed(MouseEvent m) {
+        setPositions(m.getX(), m.getY());
 
+        blip.play();
     }
 
     @Override

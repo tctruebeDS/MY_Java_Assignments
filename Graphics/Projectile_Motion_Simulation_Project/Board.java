@@ -4,6 +4,7 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -15,16 +16,12 @@ import java.awt.event.MouseListener;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JPanel;
+import java.awt.Font;
 
 public class Board extends JPanel implements MouseListener, KeyListener {
     private final int B_WIDTH = 1422;
     private final int B_HEIGHT = 800;
-    private final int SIDE_LEN = 100;
 
-    private int x = 100 - 50;
-    private int y = B_HEIGHT - 200;
-
-    private final int DIAMETER = 20;
 
     private Timer timer;
     private final int INITIAL_DELAY = 100;
@@ -34,6 +31,9 @@ public class Board extends JPanel implements MouseListener, KeyListener {
 
     private int floor = (B_HEIGHT - 25);
     private Cannon cannon;
+    private String instructions1 = "Use left/right arrows to adjust angle";
+    private String instructions2 = "Use up/down arrows to adjust time scale";
+    private String instructions3 = "Use space key to fire the cannon";
 
     /*
      * Constructor
@@ -50,12 +50,21 @@ public class Board extends JPanel implements MouseListener, KeyListener {
         timer = new Timer();
         timer.scheduleAtFixedRate(new ScheduledUpdate(),
                 INITIAL_DELAY, PERIOD_INTERVAL);
+
     }
+
+    public String getInstructions4() {
+        String instructions4 = "Angle = " + cannon.getCannonRotation() + "deg";
+        return instructions4;
+    }
+
+    private Font font = new Font("Arial", Font.PLAIN, 20);
 
     /*
      * Override the paintComponent() method.
      */
     public void paintComponent(Graphics g) {
+
         // // call parent class' method
         super.paintComponent(g);
 
@@ -63,7 +72,12 @@ public class Board extends JPanel implements MouseListener, KeyListener {
         g.drawLine(0, floor, B_WIDTH, floor);
         g.setColor(Color.GREEN);
         g.fillRect(0, floor + 1, B_WIDTH, B_HEIGHT);
-
+        g.setColor(Color.RED);
+        FontMetrics metrics = g.getFontMetrics(font);
+        g.drawString(instructions1, (B_WIDTH - metrics.stringWidth(instructions1)) / 2, 15);
+        g.drawString(instructions2, (B_WIDTH - metrics.stringWidth(instructions2)) / 2, 30);
+        g.drawString(instructions3, (B_WIDTH - metrics.stringWidth(instructions3)) / 2, 45);
+        g.drawString(getInstructions4(), (B_WIDTH - metrics.stringWidth(getInstructions4())) / 2, 60);
         cannon.paintComponent(g);
 
         g.setColor(Color.BLACK);
@@ -72,18 +86,6 @@ public class Board extends JPanel implements MouseListener, KeyListener {
         g.fillPolygon(new int[] { 50, 75, 100 }, new int[] { floor + 10, floor - 25, floor + 10 }, 3);
         g.setColor(Color.BLUE);
         g.fillOval(70, floor - 30, 10, 10);
-    }
-
-    private void rotateCannon(int direction) {
-        cannon.setCannonRotation(cannon.getCannonRotation() + (direction * rotateInterval));
-
-        if (cannon.getCannonRotation() < -90) {
-            cannon.setCannonRotation(-90);
-        } else if (cannon.getCannonRotation() > 0) {
-            cannon.setCannonRotation(0);
-        } else {
-            cannon.wheelSound.noCutPlay();
-        }
     }
 
     private class ScheduledUpdate extends TimerTask {
@@ -130,10 +132,10 @@ public class Board extends JPanel implements MouseListener, KeyListener {
     public void keyPressed(KeyEvent e) {
 
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            rotateCannon(-1);
+            cannon.rotateUp(rotateInterval);
         }
         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            rotateCannon(1);
+            cannon.rotateDown(rotateInterval);
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             cannon.fireCannon();
