@@ -36,7 +36,8 @@ public class EchoServer {
             System.out.println("Connection made with " + clientSocket.getInetAddress().getHostAddress());
             String msg = "Message received:";
             while ((inputLine = in.readLine()) != null) {
-                System.out.println(msg + inputLine);
+                System.out.println("Recieved " + inputLine);
+                out.println(inputLine);
             }
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "
