@@ -10,7 +10,7 @@ public class Cannon extends JPanel {
     private double cannonRotation;
     public SoundClip wheelSound;
     public SoundClip boomSound;
-    private final int floor = 775;
+    private final int FLOOR = 775;
     private int timeScale;
     private double rotateInterval;
 
@@ -38,8 +38,8 @@ public class Cannon extends JPanel {
 
         AffineTransform affineTransform = new AffineTransform();
         if (cannon != null) {
-            affineTransform.rotate(-Math.toRadians(cannonRotation), 75, floor - cannon.getHeight() / 2);
-            affineTransform.translate(60, floor - cannon.getHeight());
+            affineTransform.rotate(-Math.toRadians(cannonRotation), 75, FLOOR - cannon.getHeight() / 2);
+            affineTransform.translate(60, FLOOR - cannon.getHeight());
             g2d.drawImage(cannon, affineTransform, null);
         } else {
             g2d.setColor(Color.BLUE);
@@ -48,7 +48,7 @@ public class Cannon extends JPanel {
     }
 
     public void rotateUp(double rotateInterval) {
-            this.rotateInterval = rotateInterval;
+        this.rotateInterval = rotateInterval;
         setCannonRotation(cannonRotation + rotateInterval);
         if (getCannonRotation() > 90) {
             setCannonRotation(90);
@@ -56,11 +56,11 @@ public class Cannon extends JPanel {
             wheelSound.noCutPlay();
         }
     }
-    
+
     public void rotateDown(double rotateInterval) {
         this.rotateInterval = rotateInterval;
         setCannonRotation(cannonRotation - rotateInterval);
-        if (getCannonRotation() <0) {
+        if (getCannonRotation() < 0) {
             setCannonRotation(0);
         } else {
             wheelSound.noCutPlay();
@@ -78,6 +78,7 @@ public class Cannon extends JPanel {
 
     public void fireCannon() {
         boomSound.play();
+
     }
 
     public double getTimeScale() {
@@ -86,6 +87,10 @@ public class Cannon extends JPanel {
 
     public String getAngleText() {
         return "Cannon Rotation: " + getCannonRotation() + " deg";
+    }
+
+    public String getTimeScaleText() {
+        return "Time Scale: " + getTimeScale();
     }
 
 }

@@ -29,7 +29,7 @@ public class Board extends JPanel implements MouseListener, KeyListener {
 
     private int rotateInterval = 5;
 
-    private int floor = (B_HEIGHT - 25);
+    private int ground = (B_HEIGHT - 25);
     private Cannon cannon;
     private String instructions1 = "Use left/right arrows to adjust angle";
     private String instructions2 = "Use up/down arrows to adjust time scale";
@@ -40,6 +40,7 @@ public class Board extends JPanel implements MouseListener, KeyListener {
      */
     public Board() {
         cannon = new Cannon();
+        CannonBall cannonBall = new CannonBall(100, INITIAL_DELAY, ground);
         this.setFocusable(true);
         this.addKeyListener(this);
         this.addMouseListener(this);
@@ -69,9 +70,9 @@ public class Board extends JPanel implements MouseListener, KeyListener {
         super.paintComponent(g);
 
         g.setColor(Color.BLACK);
-        g.drawLine(0, floor, B_WIDTH, floor);
+        g.drawLine(0, ground, B_WIDTH, ground);
         g.setColor(Color.GREEN);
-        g.fillRect(0, floor + 1, B_WIDTH, B_HEIGHT);
+        g.fillRect(0, ground + 1, B_WIDTH, B_HEIGHT);
         g.setColor(Color.RED);
         FontMetrics metrics = g.getFontMetrics(font);
         g.drawString(instructions1, (B_WIDTH - metrics.stringWidth(instructions1)) / 2, 15);
@@ -81,11 +82,11 @@ public class Board extends JPanel implements MouseListener, KeyListener {
         cannon.paintComponent(g);
 
         g.setColor(Color.BLACK);
-        g.drawPolygon(new int[] { 50, 75, 100 }, new int[] { floor + 10, floor - 25, floor + 10 }, 3);
+        g.drawPolygon(new int[] { 50, 75, 100 }, new int[] { ground + 10, ground - 25, ground + 10 }, 3);
         g.setColor(new Color(253, 174, 174));
-        g.fillPolygon(new int[] { 50, 75, 100 }, new int[] { floor + 10, floor - 25, floor + 10 }, 3);
+        g.fillPolygon(new int[] { 50, 75, 100 }, new int[] { ground + 10, ground - 25, ground + 10 }, 3);
         g.setColor(Color.BLUE);
-        g.fillOval(70, floor - 30, 10, 10);
+        g.fillOval(70, ground - 30, 10, 10);
     }
 
     private class ScheduledUpdate extends TimerTask {
@@ -141,6 +142,7 @@ public class Board extends JPanel implements MouseListener, KeyListener {
             cannon.fireCannon();
         }
         if (e.getKeyCode() == KeyEvent.VK_UP) {
+            
             System.out.println("U pressed up");
         }
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {

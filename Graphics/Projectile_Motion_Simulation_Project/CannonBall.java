@@ -1,5 +1,8 @@
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
 
 public class CannonBall {
     private int BOARD_SCALE = 256; // pixels per meter
@@ -7,13 +10,17 @@ public class CannonBall {
     private int G_BOARD = 1; // acceleration due to gravity in pixels per timer interval ^ 2
     private int MUZZLE_VELOCITY = 37; // pixels per timer interval
     private double timeScale;
-    private double X;
-    private double Y;
-    private double VX;
-    private double VY;
-    private double XY;
+    private double X; // Initial Position
+    private double Y; // Initial Position
+    private double VX; // Initial velocity
+    private double VY; // Initial Velocity
     private double AX;
     private double AY;
+    private BufferedImage flame01;
+    private BufferedImage flame02;
+    private BufferedImage flame03;
+    private BufferedImage flame04;
+    private double ground;
 
     public enum STATE {
         IDLE,
@@ -22,14 +29,23 @@ public class CannonBall {
     }
 
     public CannonBall(double ax, double ay, double ground) {
+        this.ground = ground;
         // public constructor for CannonBall class.
         // takes the acceleration rates (x and y) and the location of the ground (as a
         // double)
         // as arguments
+        // try {
+        //     File flame = new File("media/flame01");
+        //     flame = ImageIO.read(flame);
+        //     setPreferredSize(new Dimension(cannon.getWidth(), cannon.getHeight()));
+        // } catch (Exception e) {
+        //     System.err.println(e.getMessage());
+        // }
     }
 
     private BufferedImage loadImage(String path) {
         // loads a buffered image (for the flame animation).
+
     }
 
     /*
@@ -41,6 +57,13 @@ public class CannonBall {
      * (since we assume the ball is hidden inside the cannon).
      */
     public void draw(Graphics2D g2d) {
+        if (getState().equals(STATE.IDLE)) {
+
+        } else if (getState().equals(STATE.FLYING)) {
+            
+        } else if (getState().equals(STATE.EXPLODING)) {
+            
+        }
     }
 
     /*
@@ -54,6 +77,9 @@ public class CannonBall {
      * in case the user wants to slow down the animation.
      */
     public void updateBall() {
+        if (getState().equals(STATE.FLYING)) {
+
+        }
     }
 
     /*
@@ -62,6 +88,7 @@ public class CannonBall {
      * with the inital velocity of (vx, vy).
      */
     public void launch(double x, double y, double vx, double vy) {
+        setState(STATE.FLYING);
     }
 
     /*
@@ -101,11 +128,11 @@ public class CannonBall {
     }
 
     public void setTimeScale(double timeScale) {
-
+        this.timeScale = timeScale;
     }
 
     public void setState(STATE newState) {
-
+        STATE = STATE.newState;
     }
 
     public void setX(double x) {
@@ -136,16 +163,9 @@ public class CannonBall {
     public void changeTimeScale(double delta) {
         setTimeScale(getTimeScale() + delta);
     }
-
-    private double ground;
-
-    public double getGround() {
-        return ground;
-
+    public void checkExploding() {
+        if (getY() > ground) {
+            setState(STATE.EXPLODING);
+        }
     }
-
-    public void setGround(double ground) {
-        this.ground = ground;
-    }
-
 }
