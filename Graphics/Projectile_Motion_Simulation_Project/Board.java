@@ -31,6 +31,7 @@ public class Board extends JPanel implements MouseListener, KeyListener {
 
     private int ground = (B_HEIGHT - 25);
     private Cannon cannon;
+    private CannonBall ball;
     private String instructions1 = "Use left/right arrows to adjust angle";
     private String instructions2 = "Use up/down arrows to adjust time scale";
     private String instructions3 = "Use space key to fire the cannon";
@@ -40,7 +41,7 @@ public class Board extends JPanel implements MouseListener, KeyListener {
      */
     public Board() {
         cannon = new Cannon();
-        CannonBall cannonBall = new CannonBall(100, INITIAL_DELAY, ground);
+        ball = new CannonBall(100, ground, ground);
         this.setFocusable(true);
         this.addKeyListener(this);
         this.addMouseListener(this);
@@ -65,10 +66,9 @@ public class Board extends JPanel implements MouseListener, KeyListener {
      * Override the paintComponent() method.
      */
     public void paintComponent(Graphics g) {
-
         // // call parent class' method
         super.paintComponent(g);
-
+        
         g.setColor(Color.BLACK);
         g.drawLine(0, ground, B_WIDTH, ground);
         g.setColor(Color.GREEN);
@@ -80,7 +80,7 @@ public class Board extends JPanel implements MouseListener, KeyListener {
         g.drawString(instructions3, (B_WIDTH - metrics.stringWidth(instructions3)) / 2, 45);
         g.drawString(getInstructions4(), (B_WIDTH - metrics.stringWidth(getInstructions4())) / 2, 60);
         cannon.paintComponent(g);
-
+        ball.draw((Graphics2D)g);
         g.setColor(Color.BLACK);
         g.drawPolygon(new int[] { 50, 75, 100 }, new int[] { ground + 10, ground - 25, ground + 10 }, 3);
         g.setColor(new Color(253, 174, 174));
@@ -96,6 +96,7 @@ public class Board extends JPanel implements MouseListener, KeyListener {
          */
         public void run() {
             repaint();
+            ball.updateBall();
         }
     }
 
@@ -139,7 +140,7 @@ public class Board extends JPanel implements MouseListener, KeyListener {
             cannon.rotateDown(rotateInterval);
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            cannon.fireCannon();
+            cannon.fireCannon(ball);
         }
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             

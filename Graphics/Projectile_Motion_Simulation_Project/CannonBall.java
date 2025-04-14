@@ -14,13 +14,14 @@ public class CannonBall {
     private double Y; // Initial Position
     private double VX; // Initial velocity
     private double VY; // Initial Velocity
-    private double AX;
-    private double AY;
+    private double AX = 0; // Accel x
+    private double AY = -2;
     private BufferedImage flame01;
     private BufferedImage flame02;
     private BufferedImage flame03;
     private BufferedImage flame04;
     private double ground;
+    private STATE state;
 
     public enum STATE {
         IDLE,
@@ -29,23 +30,25 @@ public class CannonBall {
     }
 
     public CannonBall(double ax, double ay, double ground) {
+        setState(STATE.IDLE);
         this.ground = ground;
+        
         // public constructor for CannonBall class.
         // takes the acceleration rates (x and y) and the location of the ground (as a
         // double)
         // as arguments
-        // try {
-        //     File flame = new File("media/flame01");
-        //     flame = ImageIO.read(flame);
-        //     setPreferredSize(new Dimension(cannon.getWidth(), cannon.getHeight()));
-        // } catch (Exception e) {
-        //     System.err.println(e.getMessage());
-        // }
     }
 
     private BufferedImage loadImage(String path) {
         // loads a buffered image (for the flame animation).
-
+        BufferedImage img = null;
+        try {
+            File imageFile = new File(path);
+            img = ImageIO.read(imageFile);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        return img;
     }
 
     /*
@@ -60,8 +63,9 @@ public class CannonBall {
         if (getState().equals(STATE.IDLE)) {
 
         } else if (getState().equals(STATE.FLYING)) {
-            
+            updateBall();
         } else if (getState().equals(STATE.EXPLODING)) {
+            loadImage("media/flame01");
             
         }
     }
@@ -78,8 +82,20 @@ public class CannonBall {
      */
     public void updateBall() {
         if (getState().equals(STATE.FLYING)) {
+            // Speed = old speed + accel
+            VX = VX + AX;
+            VY = VY + AY;
+            // Oldposition = old position + velocity
+            X = X + VX;
+            Y = Y + VY;
+        
+            checkExploding();
+        } else if (getState().equals(STATE.EXPLODING)) {
+            loadImage("media\\flame01.png");
+            
 
         }
+
     }
 
     /*
@@ -87,15 +103,22 @@ public class CannonBall {
      * will change the state to FLYING and start the ball moving from position (x,y)
      * with the inital velocity of (vx, vy).
      */
-    public void launch(double x, double y, double vx, double vy) {
-        setState(STATE.FLYING);
+    public void launch(double X, double Y, double VX, double VY) {
+        if (state != STATE.FLYING) {
+            this.X = X;
+            this.Y = Y;
+            this.VX = VX;
+            this.VY = VY;
+            setState(STATE.FLYING);
+        }
+
     }
 
     /*
      * Get/set methods for the private member variables.
      */
     public STATE getState() {
-        return STATE;
+        return state;
     }
 
     public double getX() {
@@ -132,7 +155,7 @@ public class CannonBall {
     }
 
     public void setState(STATE newState) {
-        STATE = STATE.newState;
+        state = newState;
     }
 
     public void setX(double x) {
@@ -163,9 +186,13 @@ public class CannonBall {
     public void changeTimeScale(double delta) {
         setTimeScale(getTimeScale() + delta);
     }
+
     public void checkExploding() {
         if (getY() > ground) {
             setState(STATE.EXPLODING);
         }
+    }
+    public void launchBall() {
+        setState(STATE.EXPLODING);
     }
 }
