@@ -112,12 +112,10 @@ public class Cannon extends JPanel {
         baseX = 70;
         baseY = FLOOR - 30;
         int muzzleHyp = 100;
-        System.out.println("BX" + baseX);
-        System.out.println("BY" + baseY);
         double muzzleX = baseX + Math.cos(Math.toRadians(getCannonRotation())) * muzzleHyp;
-        System.out.println("MX" + muzzleX);
-        double muzzleY = baseY - Math.cos(Math.toRadians(getCannonRotation()))* muzzleHyp;
-        System.out.println(muzzleY);
+        System.out.println("MX " + muzzleX);
+        double muzzleY = baseY - Math.sin(Math.toRadians(getCannonRotation())) * muzzleHyp;
+        System.out.println("MY " + muzzleY);
         g.setColor(Color.RED);
         g.drawLine((int) muzzleX, (int) muzzleY, (int) baseX, (int) baseY);
     }
