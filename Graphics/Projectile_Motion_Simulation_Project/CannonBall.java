@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -6,7 +7,7 @@ import javax.imageio.ImageIO;
 
 public class CannonBall {
     private int BOARD_SCALE = 256; // pixels per meter
-    private int TIMER_INTERVAL = 20; // milliseconds per timer interval
+    private int TIMER_INTERVAL = 25; // milliseconds per timer interval
     private int G_BOARD = 1; // acceleration due to gravity in pixels per timer interval ^ 2
     private int MUZZLE_VELOCITY = 37; // pixels per timer interval
     private double timeScale;
@@ -15,13 +16,14 @@ public class CannonBall {
     private double VX; // Initial velocity
     private double VY; // Initial Velocity
     private double AX = 0; // Accel x
-    private double AY = -2;
+    private double AY = 2;
     private BufferedImage flame01;
     private BufferedImage flame02;
     private BufferedImage flame03;
     private BufferedImage flame04;
     private double ground;
     private STATE state;
+    private String flamePath;
 
     public enum STATE {
         IDLE,
@@ -32,7 +34,8 @@ public class CannonBall {
     public CannonBall(double ax, double ay, double ground) {
         setState(STATE.IDLE);
         this.ground = ground;
-        
+        flamePath = "media//flame01.png";
+        loadImage(flamePath);
         // public constructor for CannonBall class.
         // takes the acceleration rates (x and y) and the location of the ground (as a
         // double)
@@ -44,7 +47,7 @@ public class CannonBall {
         BufferedImage img = null;
         try {
             File imageFile = new File(path);
-            img = ImageIO.read(imageFile);
+            flame01 = ImageIO.read(imageFile);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -63,10 +66,11 @@ public class CannonBall {
         if (getState().equals(STATE.IDLE)) {
 
         } else if (getState().equals(STATE.FLYING)) {
-            updateBall();
+            // draw a ball.
+            g2d.setColor(Color.RED);
+            g2d.fillOval((int) X - 10, (int) Y - 10, 20, 20);
         } else if (getState().equals(STATE.EXPLODING)) {
-            loadImage("media/flame01");
-            
+            g2d.drawImage(flame01, (int) X - flame01.getWidth() / 2, (int) ground - flame01.getHeight(), null);
         }
     }
 
@@ -88,12 +92,10 @@ public class CannonBall {
             // Oldposition = old position + velocity
             X = X + VX;
             Y = Y + VY;
-        
+
             checkExploding();
         } else if (getState().equals(STATE.EXPLODING)) {
-            loadImage("media\\flame01.png");
-            
-
+            // do nothing
         }
 
     }
@@ -192,7 +194,8 @@ public class CannonBall {
             setState(STATE.EXPLODING);
         }
     }
+
     public void launchBall() {
-        setState(STATE.EXPLODING);
+        setState(STATE.FLYING);
     }
 }

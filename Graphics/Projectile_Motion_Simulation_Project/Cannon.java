@@ -19,6 +19,7 @@ public class Cannon extends JPanel {
     public double cannonEndY;
     public double muzzleX;
     public double muzzleY;
+    static final public double MUZZLE_VELOCITY = 37;
 
     public Cannon() {
 
@@ -37,9 +38,7 @@ public class Cannon extends JPanel {
         }
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
 
         AffineTransform affineTransform = new AffineTransform();
@@ -50,7 +49,7 @@ public class Cannon extends JPanel {
             affineTransform.translate(60, FLOOR - cannon.getHeight());
             g2d.drawImage(cannon, affineTransform, null);
             findMuzzle(g);
-            
+
         } else {
             g2d.setColor(Color.BLUE);
             g2d.drawString("Unable to load image!", 25, 25);
@@ -89,9 +88,20 @@ public class Cannon extends JPanel {
     }
 
     public void fireCannon(CannonBall ball) {
+        // place ball at muzzle of cannon.
+        // muzzle x and y should have been updated during
+        ball.setX(muzzleX);
+        ball.setY(muzzleY);
+
+        // set velocity.
+        double VX = MUZZLE_VELOCITY * Math.cos(Math.toRadians(this.getCannonRotation()));
+        double VY = -MUZZLE_VELOCITY * Math.sin(Math.toRadians(this.getCannonRotation()));
+        ball.setVX(VX);
+        ball.setVY(VY);
+
+        // launch the ball.
         ball.launchBall();
         boomSound.play();
-        ball.updateBall();
     }
 
     public double getTimeScale() {
@@ -109,13 +119,20 @@ public class Cannon extends JPanel {
     public void findMuzzle(Graphics g) {
         // Find the xy coordinates of the end of the barrel
 
-        baseX = 70;
-        baseY = FLOOR - 30;
+        baseX = 75;
+        baseY = FLOOR - 25;
         int muzzleHyp = 100;
-        double muzzleX = baseX + Math.cos(Math.toRadians(getCannonRotation())) * muzzleHyp;
-        System.out.println("MX " + muzzleX);
-        double muzzleY = baseY - Math.sin(Math.toRadians(getCannonRotation())) * muzzleHyp;
-        System.out.println("MY " + muzzleY);
+        System.out.printf("BX, BY = %.1f, %1f%n", baseX, baseY);
+        double angleRadians = Math.toRadians(getCannonRotation());
+        System.out.printf("angle = %.2f degrees (%.2f radians)%n", getCannonRotation(), angleRadians);
+
+        // double muzzleX = baseX + Math.cos(Math.toRadians(getCannonRotation())) *
+        // muzzleHyp;
+        muzzleX = baseX + muzzleHyp * Math.cos(angleRadians);
+        // double muzzleY = baseY - Math.cos(Math.toRadians(getCannonRotation())) *
+        // muzzleHyp;
+        muzzleY = baseY - muzzleHyp * Math.sin(angleRadians);
+        System.out.printf("muzzleX, muzzleY = %.2f, %.2f%n", muzzleX, muzzleY);
         g.setColor(Color.RED);
         g.drawLine((int) muzzleX, (int) muzzleY, (int) baseX, (int) baseY);
     }

@@ -22,7 +22,6 @@ public class Board extends JPanel implements MouseListener, KeyListener {
     private final int B_WIDTH = 1422;
     private final int B_HEIGHT = 800;
 
-
     private Timer timer;
     private final int INITIAL_DELAY = 100;
     private final int PERIOD_INTERVAL = 25;
@@ -36,12 +35,20 @@ public class Board extends JPanel implements MouseListener, KeyListener {
     private String instructions2 = "Use up/down arrows to adjust time scale";
     private String instructions3 = "Use space key to fire the cannon";
 
+    // define the accel and init velocity for game board and then
+    // pass to cannonball.
+    private final double BOARD_SCALE = 256; // pixels per meter.
+    private final double G_SI = 9.81; // meters per second squared.
+
+    // acceleration for the board is in pixels per timer interval squared.
+    private final double G_BOARD = (int) (G_SI * BOARD_SCALE * PERIOD_INTERVAL / 1000 * PERIOD_INTERVAL / 1000);
+
     /*
      * Constructor
      */
     public Board() {
         cannon = new Cannon();
-        ball = new CannonBall(100, ground, ground);
+        ball = new CannonBall(0, G_BOARD, ground);
         this.setFocusable(true);
         this.addKeyListener(this);
         this.addMouseListener(this);
@@ -68,7 +75,7 @@ public class Board extends JPanel implements MouseListener, KeyListener {
     public void paintComponent(Graphics g) {
         // // call parent class' method
         super.paintComponent(g);
-        
+
         g.setColor(Color.BLACK);
         g.drawLine(0, ground, B_WIDTH, ground);
         g.setColor(Color.GREEN);
@@ -79,8 +86,8 @@ public class Board extends JPanel implements MouseListener, KeyListener {
         g.drawString(instructions2, (B_WIDTH - metrics.stringWidth(instructions2)) / 2, 30);
         g.drawString(instructions3, (B_WIDTH - metrics.stringWidth(instructions3)) / 2, 45);
         g.drawString(getInstructions4(), (B_WIDTH - metrics.stringWidth(getInstructions4())) / 2, 60);
-        cannon.paintComponent(g);
-        ball.draw((Graphics2D)g);
+        cannon.draw(g);
+        ball.draw((Graphics2D) g);
         g.setColor(Color.BLACK);
         g.drawPolygon(new int[] { 50, 75, 100 }, new int[] { ground + 10, ground - 25, ground + 10 }, 3);
         g.setColor(new Color(253, 174, 174));
@@ -95,8 +102,8 @@ public class Board extends JPanel implements MouseListener, KeyListener {
          * Update the position of our ball here.
          */
         public void run() {
-            repaint();
             ball.updateBall();
+            repaint();
         }
     }
 
@@ -141,9 +148,10 @@ public class Board extends JPanel implements MouseListener, KeyListener {
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             cannon.fireCannon(ball);
+            repaint();
         }
         if (e.getKeyCode() == KeyEvent.VK_UP) {
-            
+
             System.out.println("U pressed up");
         }
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
