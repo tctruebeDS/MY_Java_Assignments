@@ -25,19 +25,16 @@ public class ChatClient {
         try (
                 Socket socket = new Socket(hostName, portNumber);
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(socket.getInputStream()));
                 BufferedReader stdIn = new BufferedReader(
                         new InputStreamReader(System.in))) {
             MessageHandler messageHandler = new MessageHandler(socket);
             new Thread(messageHandler).start();
 
-            // String userInput;
-            // while ((userInput = stdIn.readLine()) != null) {
-            //     out.println(userInput);
-
-            // }
-            // System.out.println("bye");
+            String userInput;
+            while ((userInput = stdIn.readLine()) != null) {
+                out.println(userInput);
+            }
+            System.out.println("bye");
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
             System.exit(1);
